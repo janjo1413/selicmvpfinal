@@ -1,210 +1,136 @@
-# 🚧 TODO - Roadmap do Projeto
+# 📋 TODO - Pendências e Melhorias
 
-## ✅ FASE 1 - MVP Básico (CONCLUÍDA)
+**Versão Atual:** 1.0.0  
+**Última Atualização:** 01/10/2025
 
-- [x] Estrutura do projeto
-- [x] Backend FastAPI
-- [x] Cliente Microsoft Graph
-- [x] Mapeamento de inputs/outputs
-- [x] Frontend HTML/CSS/JS
-- [x] Validações de formulário
-- [x] Rate limiting
-- [x] Exportação CSV
-- [x] Casos de teste
-- [x] Documentação
-- [x] Scripts de deploy
+---
 
-## 🔄 FASE 2 - SELIC Dinâmica (OPCIONAL)
+## 🔥 Prioridade Alta (v1.1.0 - Próxima versão)
 
-### 2.1 Investigação (1 semana)
-- [ ] Abrir planilha e identificar aba "Tabela de Correão e Juros"
-- [ ] Mapear estrutura de colunas (identificar coluna SELIC)
-- [ ] Identificar faixa de células com SELIC
-- [ ] Testar atualização manual de 1 valor
-- [ ] Validar que atualização não quebra fórmulas
+### Performance
+- [ ] Otimizar leitura Excel: Ler todos os 9 cenários em uma operação
+- [ ] Reduzir tempo de execução de 112s para ~10s
+- [ ] Implementar cache em memória para resultados recentes
 
-### 2.2 API BACEN
-- [ ] Implementar cliente para API BACEN SGS
-- [ ] Testar séries: 11, 432, 4390, 4189
-- [ ] Definir qual série usar (recomendação: 432 - Meta SELIC)
-- [ ] Implementar cache de consultas
-- [ ] Tratamento de erros e timeout
+### API BACEN
+- [ ] Integrar API BACEN para taxas SELIC atualizadas
+- [ ] Implementar cache de taxas (Redis ou arquivo local)
+- [ ] Fallback para taxas locais se API falhar
 
-### 2.3 Atualização de SELIC
-- [ ] Implementar função `atualizar_selic()` no `calculator_service.py`
-- [ ] Escrever valores no range correto da planilha
-- [ ] Validar que cálculos refletem novos valores
-- [ ] Adicionar flag `selic_atualizar` no input
+### Testes
+- [ ] Testes unitários com pytest (coverage mínimo 50%)
+- [ ] Testes de integração para endpoints
+- [ ] Validar precisão dos cálculos vs Excel manual
 
-### 2.4 Políticas de Lacunas
-- [ ] Implementar modo **Estrito** (fail-fast)
-- [ ] Implementar modo **Permissivo** (carry-forward)
-- [ ] Adicionar warnings/alertas no frontend
-- [ ] Configuração via .env ou input
+---
 
-### 2.5 Fallbacks
-- [ ] Override manual via JSON input
-- [ ] Importação de CSV com SELIC customizada
-- [ ] Validação de formato CSV
-- [ ] Merge de dados BACEN + CSV
+## 🟡 Prioridade Média (v1.2.0)
 
-### 2.6 Auditoria
-- [ ] Criar aba `selic_resolver` na planilha
-- [ ] Registrar competências atualizadas
-- [ ] Registrar fonte de dados (API/CSV/Override)
-- [ ] Timestamp de atualização
-- [ ] Salvar log em banco de dados
-
-### 2.7 Frontend
-- [ ] Checkbox "Atualizar SELIC"
-- [ ] Modal de configuração avançada
-- [ ] Exibir competências atualizadas
-- [ ] Alertas de lacunas
-- [ ] Upload de CSV para override
-
-## 🗄️ FASE 3 - Persistência e Histórico
-
-### 3.1 Banco de Dados
-- [ ] Escolher DB (PostgreSQL ou MongoDB)
-- [ ] Criar schema/models
-- [ ] Implementar CRUD de execuções
-- [ ] Migrar de SQLite/JSON para DB produção
-
-### 3.2 Histórico
-- [ ] Endpoint para listar execuções anteriores
-- [ ] Endpoint para buscar por Run ID
-- [ ] Frontend: página de histórico
-- [ ] Filtros: data, município, cenário
-
-### 3.3 Comparação
-- [ ] Comparar 2 execuções lado a lado
-- [ ] Diff de inputs
-- [ ] Diff de outputs
-- [ ] Visualização de variação percentual
-
-## 📊 FASE 4 - Dashboard e Analytics
-
-### 4.1 Métricas
-- [ ] Tempo médio de execução
-- [ ] Taxa de sucesso/erro
-- [ ] Municípios mais consultados
-- [ ] Cenários mais usados
-- [ ] Latência de APIs (Graph + BACEN)
-
-### 4.2 Dashboard Admin
-- [ ] Página de monitoramento
-- [ ] Gráficos de uso
-- [ ] Logs em tempo real
-- [ ] Alertas de erro
-- [ ] Estatísticas de rate limiting
-
-### 4.3 Exportação Avançada
-- [ ] Excel (.xlsx) com formatação
-- [ ] PDF com logo/cabeçalho
-- [ ] Envio por email
-- [ ] Webhook para integração
-
-## 🔐 FASE 5 - Autenticação e Multi-tenant
-
-### 5.1 Sistema de Login
+### Segurança
 - [ ] Autenticação JWT
-- [ ] Cadastro de usuários
-- [ ] Perfis (Admin, Usuário)
-- [ ] Recuperação de senha
+- [ ] Rate limiting (proteção contra DDoS)
+- [ ] CORS configurado para produção
+- [ ] Input sanitization aprimorado
 
-### 5.2 Multi-tenant
-- [ ] Organizações/escritórios
-- [ ] Múltiplas planilhas por tenant
-- [ ] Isolamento de dados
-- [ ] Cobrança por uso
+### Persistência
+- [ ] Banco de dados (PostgreSQL ou SQLite)
+- [ ] Histórico de cálculos por usuário
+- [ ] Salvar templates personalizados
 
-### 5.3 Permissões
-- [ ] RBAC (Role-Based Access Control)
-- [ ] Limites por plano
-- [ ] Quotas de execução
-
-## 🚀 FASE 6 - Otimização e Escala
-
-### 6.1 Performance
-- [ ] Cache de sessões Excel
-- [ ] Pool de conexões Graph API
-- [ ] Paralelização de leitura de outputs
-- [ ] CDN para assets estáticos
-
-### 6.2 Escalabilidade
-- [ ] Fila de jobs (Celery/RQ)
-- [ ] Workers assíncronos
-- [ ] Load balancer
-- [ ] Auto-scaling
-
-### 6.3 Confiabilidade
-- [ ] Retry automático com exponential backoff
-- [ ] Circuit breaker
-- [ ] Health checks avançados
-- [ ] Alertas PagerDuty/Slack
-
-## 🧪 FASE 7 - Testes e Qualidade
-
-### 7.1 Testes Unitários
-- [ ] Cobertura > 80%
-- [ ] Testes de models
-- [ ] Testes de serviços
-- [ ] Testes de API
-
-### 7.2 Testes de Integração
-- [ ] Mock do Microsoft Graph
-- [ ] Mock do BACEN
-- [ ] Testes end-to-end
-
-### 7.3 CI/CD
-- [ ] GitHub Actions
-- [ ] Testes automáticos
-- [ ] Deploy automático
-- [ ] Rollback automático
-
-## 📱 FASE 8 - Mobile e PWA
-
-- [ ] Progressive Web App (PWA)
-- [ ] Instalável (Add to Home Screen)
-- [ ] Offline-first (cache)
-- [ ] Push notifications
-- [ ] App nativo (React Native - futuro)
-
-## 🌍 FASE 9 - Internacionalização
-
-- [ ] Suporte PT-BR, EN, ES
-- [ ] Formatação de moeda por locale
-- [ ] Formatação de data por locale
-- [ ] Documentação multilíngue
-
-## 🤖 FASE 10 - IA e Automação
-
-- [ ] Preenchimento inteligente (sugerir valores)
-- [ ] Detecção de anomalias nos resultados
-- [ ] Previsão de SELIC futura (ML)
-- [ ] Chatbot para suporte
+### UI/UX
+- [ ] Gráficos comparativos (Chart.js)
+- [ ] Dark mode
+- [ ] Design responsivo mobile melhorado
+- [ ] Tooltips explicativos nos campos
 
 ---
 
-## 🎯 Priorização
+## 🟢 Prioridade Baixa (Futuro)
 
-### Alto Impacto, Curto Prazo
-1. FASE 2: SELIC Dinâmica (2-3 semanas)
-2. FASE 3.1: Banco de dados (1 semana)
-3. FASE 5.1: Sistema de login (2 semanas)
+### Features Avançadas
+- [ ] Export PDF com relatório completo
+- [ ] Comparação de múltiplos cálculos lado a lado
+- [ ] Batch processing (calcular vários casos de uma vez)
+- [ ] Templates personalizados (múltiplas planilhas)
 
-### Médio Impacto
-4. FASE 4: Dashboard (2 semanas)
-5. FASE 6.1: Performance (1 semana)
-6. FASE 7: Testes (contínuo)
+### Cálculos
+- [ ] Implementar fórmulas em Python puro (eliminar Excel)
+- [ ] Validar precisão matemática com 6+ casas decimais
+- [ ] Adicionar novos índices de correção
 
-### Baixo Impacto / Longo Prazo
-7. FASE 8: Mobile (1 mês)
-8. FASE 9: i18n (2 semanas)
-9. FASE 10: IA (exploratório)
+### Deploy
+- [ ] Containerização Docker
+- [ ] CI/CD com GitHub Actions
+- [ ] Deploy em Heroku/Railway/Render
+- [ ] Monitoring com Sentry
+- [ ] Backup automático
 
 ---
 
-**Última Atualização:** 01/10/2025  
-**Versão Atual:** 1.0.0 (FASE 1)  
-**Próxima Milestone:** FASE 2 - SELIC Dinâmica
+## 🐛 Bugs Conhecidos
+
+### Performance
+- ⚠️ Tempo de execução muito lento (~112s)
+  - **Causa:** 9 leituras separadas do Excel
+  - **Solução:** Ler todos os ranges de uma vez (v1.1.0)
+
+### Compatibilidade
+- ⚠️ OneDrive interfere com arquivos Excel
+  - **Workaround:** Usar `C:\Temp` ou desabilitar sync temporariamente
+  - **Solução:** Implementar lock de arquivo ou usar DB (v1.2.0)
+
+### Limitações
+- ⚠️ SELIC não atualiza automaticamente
+  - **Solução:** API BACEN (v1.1.0)
+- ⚠️ Não suporta múltiplos usuários simultâneos
+  - **Solução:** Database + queue system (v1.2.0)
+
+---
+
+## 💡 Ideias Futuras (Não Priorizadas)
+
+- App mobile (React Native)
+- Integração com sistemas de tribunais (e-SAJ, PJe)
+- OCR para extrair dados de documentos PDF
+- IA para sugerir melhores estratégias de correção
+- Marketplace de templates de cálculo
+- API pública REST + GraphQL
+- Notificações por email/SMS
+- Colaboração em tempo real (múltiplos usuários)
+- Versionamento de cálculos
+- Auditoria completa de alterações
+
+---
+
+## 📊 Métricas de Sucesso
+
+### v1.1.0 (Performance + BACEN)
+- ⏱️ Tempo execução: <10 segundos
+- 📈 SELIC atualizada diariamente via API
+- ✅ 50%+ test coverage
+- 👥 Suportar 10 usuários simultâneos
+
+### v1.2.0 (Auth + Persistência)
+- 🔐 100% requisições autenticadas
+- 💾 Histórico de 100+ cálculos salvos
+- 🚫 Zero ataques DDoS bem-sucedidos
+- 👥 50+ usuários cadastrados
+
+### v2.0.0 (Cálculos Python)
+- ⚡ <5 segundos por cálculo
+- 🎯 Precisão 99.99% vs Excel
+- 📊 100% fórmulas documentadas
+- 🚀 Suportar 100 usuários simultâneos
+
+---
+
+## 🎯 Próximos Passos Imediatos
+
+1. **Semana 1-2:** Otimizar leitura Excel (v1.1.0)
+2. **Semana 3-4:** Integrar API BACEN
+3. **Semana 5-6:** Testes automatizados
+4. **Release v1.1.0:** Performance + SELIC dinâmica
+
+---
+
+**Contribuições:** Abra uma issue no GitHub para sugerir novas features!
