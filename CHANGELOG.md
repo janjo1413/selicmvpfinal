@@ -4,6 +4,48 @@ Todas as mudanças notáveis serão documentadas neste arquivo.
 
 ---
 
+## [1.1.0] - 2025-10-01 🎉
+
+### ✨ Adicionado
+- **Cálculo de honorários em Python**: Honorários agora calculam corretamente e dinamicamente
+  - ✅ Suporte a honorários percentuais (% sobre principal)
+  - ✅ Suporte a honorários fixos (valor em R$)
+  - ✅ Aplicação de deságio nos honorários
+  - ✅ Cálculo automático de total (principal + honorários)
+  - ✅ Prioridade: percentual sobrescreve fixo quando ambos informados
+
+### 🐛 Corrigido
+- **Honorários zerados (bug crítico v1.0.0)**: Agora calcula corretamente usando Python
+- **Total incorreto**: Soma correta de principal + honorários líquidos
+- **Deságio não aplicado**: Deságio de honorários agora funciona
+
+### 🚀 Melhorias
+- **Performance**: Leitura otimizada do Excel (lê apenas coluna D - Principal)
+- **Logs aprimorados**: Debug detalhado do cálculo de honorários
+- **Testes unitários**: 11 testes cobrindo todos os casos de uso
+
+### 🔧 Técnico
+- Novo módulo: `src/honorarios_calculator.py` (79 linhas)
+- Refatoração: `calculator_service.py` integrado com `HonorariosCalculator`
+- Testes: `tests/test_honorarios_calculator.py` (141 linhas, 11 casos)
+- Arquitetura híbrida: Excel para valores principais, Python para honorários
+
+### 📊 Cobertura de Testes
+```
+test_honorarios_percentual_sem_desagio ✅
+test_honorarios_percentual_com_desagio ✅
+test_honorarios_fixo_sem_desagio ✅
+test_honorarios_fixo_com_desagio ✅
+test_sem_honorarios ✅
+test_prioridade_percentual_sobre_fixo ✅
+test_valores_reais_timon ✅
+test_arredondamento_correto ✅
+test_principal_zero ✅
+test_percentuais_extremos ✅
+```
+
+---
+
 ## [1.0.0] - 2025-10-01
 
 ### ✅ Funcionalidades Implementadas

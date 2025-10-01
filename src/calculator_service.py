@@ -9,6 +9,7 @@ from typing import Dict, Any
 from pathlib import Path
 from models import CalculadoraInput, CalculadoraOutput, CenarioOutput
 from excel_template_calculator import ExcelTemplateCalculator
+from honorarios_calculator import HonorariosCalculator
 from config import EXCEL_FULL_PATH
 
 logger = logging.getLogger(__name__)
@@ -99,27 +100,38 @@ class CalculadoraService:
                 calc_time = int((time.time() - calc_start) * 1000)
                 logger.info(f"[{run_id}] Salvamento concluído em {calc_time}ms")
                 
-                # 4. Ler outputs calculados
+                # 4. Ler outputs calculados (Excel fornece apenas Principal)
                 logger.info(f"[{run_id}] Lendo outputs D24:F69 calculados")
+                logger.info(f"[{run_id}] Calculando honorários em Python...")
+                
+                # Instanciar calculadora de honorários
+                hon_calc = HonorariosCalculator()
                 
                 results = {}
                 for cenario_name, line_number in OUTPUT_LINES.items():
-                    # Ler as 3 colunas (D, E, F) da linha
-                    range_address = f"D{line_number}:F{line_number}"
+                    # Ler coluna D (Principal) da linha
+                    range_address = f"D{line_number}"
                     values = excel_calc.read_range_calculated("RESUMO", range_address)
                     
-                    if values and len(values) > 0 and len(values[0]) >= 3:
+                    if values and len(values) > 0:
+                        # Principal vem do Excel
                         principal = float(values[0][0]) if values[0][0] is not None else 0.0
-                        honorarios = float(values[0][1]) if values[0][1] is not None else 0.0
-                        total = float(values[0][2]) if values[0][2] is not None else 0.0
+                        
+                        # Honorários e Total calculados em Python
+                        hon_resultado = hon_calc.calcular(
+                            principal=principal,
+                            honorarios_perc=input_dict['honorarios_perc'],
+                            honorarios_fixo=input_dict['honorarios_fixo'],
+                            desagio_honorarios=input_dict['desagio_honorarios']
+                        )
                         
                         results[cenario_name] = CenarioOutput(
                             principal=principal,
-                            honorarios=honorarios,
-                            total=total
+                            honorarios=hon_resultado['honorarios'],
+                            total=hon_resultado['total']
                         )
                         
-                        logger.debug(f"[{run_id}] {cenario_name}: P={principal}, H={honorarios}, T={total}")
+                        logger.debug(f"[{run_id}] {cenario_name}: P={principal:,.2f}, H={hon_resultado['honorarios']:,.2f}, T={hon_resultado['total']:,.2f}")
                     else:
                         logger.warning(f"[{run_id}] Dados inválidos para {cenario_name} na linha {line_number}")
                         results[cenario_name] = CenarioOutput(

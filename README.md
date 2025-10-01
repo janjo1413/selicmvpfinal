@@ -1,4 +1,22 @@
-﻿# 📊 Calculadora Trabalhista MVP
+﻿# 📊 Ca**Versão:** 1.1.0 🎉  
+**Status:** ✅ Funcional com Honorários Dinâmicos
+
+---
+
+## ✨ Novidades v1.1.0
+
+- ✅ **Honorários calculam corretamente!** Implementado em Python
+- ✅ **Suporte a honorários percentuais e fixos**
+- ✅ **Deságio de honorários funcional**
+- ✅ **11 testes unitários** garantindo precisão
+- ✅ **Logs detalhados** para debug
+
+## ⚠️ Limitações Conhecidas (v1.1.0)
+
+- **Performance**: ~2 minutos por cálculo (será otimizado na v1.2.0)
+- **Deságio do Principal**: Ainda não implementado (próxima versão)
+
+> 💡 **v1.2.0 Planejada**: Implementar deságio de principal + otimização de performance (~10s).alhista MVP
 
 > Sistema web que calcula valores trabalhistas usando Excel local como motor de cálculo
 
