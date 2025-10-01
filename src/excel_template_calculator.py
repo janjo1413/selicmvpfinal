@@ -62,9 +62,9 @@ class ExcelTemplateCalculator:
             raise
             
     def save_workbook(self):
-        """NÃO salva - apenas mantém mudanças em memória"""
-        logger.info("Mudanças mantidas em memória (sem salvar arquivo)")
-        # NÃO SALVAR! Isso faz openpyxl perder os valores calculados
+        """Salva workbook temporário (necessário para recálculo)"""
+        # NOTA v1.0.0: Desabilitado - openpyxl perde valores calculados ao salvar
+        # TODO v1.1.0: Reimplementar com cálculos nativos em Python
         pass
             
     def read_range_calculated(self, worksheet_name: str, range_address: str) -> List[List]:

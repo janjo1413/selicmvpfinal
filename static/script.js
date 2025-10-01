@@ -65,10 +65,10 @@ async function handleSubmit(event) {
         periodo_fim: formData.get('periodo_fim'),
         ajuizamento: formData.get('ajuizamento'),
         citacao: formData.get('citacao'),
-        honorarios_perc: parseFloat(formData.get('honorarios_perc')) / 100, // Converter para decimal
-        honorarios_fixo: parseFloat(formData.get('honorarios_fixo')),
-        desagio_principal: parseFloat(formData.get('desagio_principal')) / 100,
-        desagio_honorarios: parseFloat(formData.get('desagio_honorarios')) / 100,
+        honorarios_perc: parseFloat(formData.get('honorarios_perc')) || 0, // Manter como percentual (20 = 20%)
+        honorarios_fixo: parseFloat(formData.get('honorarios_fixo')) || 0,
+        desagio_principal: parseFloat(formData.get('desagio_principal')) || 0, // Manter como percentual
+        desagio_honorarios: parseFloat(formData.get('desagio_honorarios')) || 0, // Manter como percentual
         correcao_ate: formData.get('correcao_ate')
     };
     
@@ -247,9 +247,21 @@ function formatarDataHora(iso) {
 
 // Limpar formulário
 function limparFormulario() {
-    document.getElementById('calculadoraForm').reset();
+    // Reset do formulário
+    const form = document.getElementById('calculadoraForm');
+    if (form) {
+        form.reset();
+    }
+    
+    // Limpar resultado global
+    ultimoResultado = null;
+    
+    // Esconder seções
     esconderResultados();
     esconderErro();
+    
+    // Log para debug
+    console.log('Formulário limpo com sucesso');
 }
 
 // Novo cálculo

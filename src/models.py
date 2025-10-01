@@ -14,10 +14,10 @@ class CalculadoraInput(BaseModel):
     periodo_fim: date = Field(..., description="Data de fim do período (AAAA-MM-DD)")
     ajuizamento: date = Field(..., description="Data de ajuizamento (AAAA-MM-DD)")
     citacao: date = Field(..., description="Data de citação (AAAA-MM-DD)")
-    honorarios_perc: float = Field(0.0, ge=0.0, le=1.0, description="Honorários percentual (0.00 a 1.00)")
+    honorarios_perc: float = Field(0.0, ge=0.0, le=100.0, description="Honorários percentual (0 a 100)")
     honorarios_fixo: float = Field(0.0, ge=0.0, description="Honorários fixo em reais")
-    desagio_principal: float = Field(0.0, ge=0.0, le=1.0, description="Deságio sobre principal (0.00 a 1.00)")
-    desagio_honorarios: float = Field(0.0, ge=0.0, le=1.0, description="Deságio sobre honorários (0.00 a 1.00)")
+    desagio_principal: float = Field(0.0, ge=0.0, le=100.0, description="Deságio sobre principal (0 a 100)")
+    desagio_honorarios: float = Field(0.0, ge=0.0, le=100.0, description="Deságio sobre honorários (0 a 100)")
     correcao_ate: date = Field(..., description="Data de correção até (AAAA-MM-DD)")
     
     @field_validator('periodo_fim')

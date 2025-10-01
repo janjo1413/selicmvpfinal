@@ -6,22 +6,32 @@ Todas as mudanças notáveis serão documentadas neste arquivo.
 
 ## [1.0.0] - 2025-10-01
 
-### ✨ Adicionado
-- Sistema completo de cálculo trabalhista
-- 9 cenários de correção monetária (NT7, NT6, JASA, TR, IPCA-E, etc.)
+### ✅ Funcionalidades Implementadas
+- Sistema MVP funcional com 9 cenários de cálculo
 - Interface web responsiva (HTML/CSS/JS)
-- Backend FastAPI com endpoints /api/calcular e /api/exportar-csv
-- Integração com Excel via openpyxl (data_only=True)
-- Cálculo de honorários (percentual ou fixo)
-- Deságio configurável
-- Export CSV completo com metadados
+- Backend FastAPI com endpoints `/api/calcular` e `/api/exportar-csv`
+- Integração com template Excel via openpyxl (data_only=True)
+- Export CSV completo com metadados (data, hora, parâmetros)
 - Validação de inputs com Pydantic
-- Logging estruturado
-- Script de inicialização Windows (iniciar.bat)
-- Configuração via variáveis de ambiente (.env)
-- Documentação completa (README.md, docs/)
+- Logging estruturado com timestamps
+- Script de inicialização Windows (`iniciar.bat`)
+- Botões "Novo Cálculo", "Limpar" e "Exportar CSV" funcionais
+- Limpeza de código (redução de 65% dos arquivos)
+- Documentação consolidada (README, CHANGELOG, TODO, ARCHITECTURE)
 
-### 🔧 Técnico
+### ⚠️ Limitações Conhecidas
+- **Honorários dinâmicos**: Usa valores pré-calculados do template Excel (limitação do openpyxl)
+- **Deságio dinâmico**: Usa valores pré-calculados do template Excel
+- **Performance**: ~2 minutos por cálculo (I/O de arquivos Excel)
+- **Dependência Excel**: Sistema depende 100% do template Excel para fórmulas
+
+### 📝 Notas Técnicas
+- Arquitetura baseada em template Excel protegido (somente leitura)
+- openpyxl não suporta recálculo de fórmulas (limitação da biblioteca)
+- Valores calculados são perdidos quando workbook é salvo com openpyxl
+- Solução v1.1.0: Reimplementar todas as fórmulas em Python nativo
+
+### 🔧 Stack Técnico
 - Python 3.13
 - FastAPI 0.109.0
 - openpyxl 3.1.2 com data_only=True

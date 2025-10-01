@@ -7,20 +7,31 @@
 
 ## 🔥 Prioridade Alta (v1.1.0 - Próxima versão)
 
-### Performance
-- [ ] Otimizar leitura Excel: Ler todos os 9 cenários em uma operação
-- [ ] Reduzir tempo de execução de 112s para ~10s
-- [ ] Implementar cache em memória para resultados recentes
+### 🎯 Objetivo Principal: Remover Dependência do Excel
 
-### API BACEN
-- [ ] Integrar API BACEN para taxas SELIC atualizadas
-- [ ] Implementar cache de taxas (Redis ou arquivo local)
-- [ ] Fallback para taxas locais se API falhar
+#### Reimplementação de Cálculos em Python
+- [ ] **Módulo de Correção IPCA**: Implementar fórmula de correção monetária
+- [ ] **Módulo de Correção SELIC**: Implementar fórmula com taxas diárias
+- [ ] **Módulo de Correção TR**: Implementar fórmula de correção
+- [ ] **Cálculo Dinâmico de Honorários**: Implementar % sobre valores calculados
+- [ ] **Cálculo Dinâmico de Deságio**: Implementar % sobre principal
+- [ ] **Validação de Precisão**: Comparar Python vs Excel (margem erro < 0.01%)
+- [ ] **Implementar 9 Cenários**: NT7, NT6, JASA, TR, IPCA-E, etc.
 
-### Testes
-- [ ] Testes unitários com pytest (coverage mínimo 50%)
-- [ ] Testes de integração para endpoints
-- [ ] Validar precisão dos cálculos vs Excel manual
+#### Performance
+- [ ] Otimizar tempo de execução: ~2min → ~10s (20x mais rápido)
+- [ ] Remover operações de I/O desnecessárias
+- [ ] Implementar cálculos diretos sem arquivos temporários
+
+#### Integrações Externas
+- [ ] **API BACEN**: Buscar taxas SELIC atualizadas automaticamente
+- [ ] **API IBGE**: Buscar índices IPCA atualizados automaticamente
+- [ ] **Fallback Offline**: Arquivo CSV local para taxas/índices históricos
+
+#### Qualidade de Código
+- [ ] **Testes Unitários**: pytest para cada função de cálculo (coverage > 80%)
+- [ ] **Testes de Integração**: Validar cenários completos end-to-end
+- [ ] **Documentação**: Docstrings detalhadas com exemplos de uso
 
 ---
 

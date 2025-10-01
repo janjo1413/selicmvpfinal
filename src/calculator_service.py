@@ -90,7 +90,7 @@ class CalculadoraService:
                     
                     # Escrever na célula
                     excel_calc.write_cell(worksheet, address, value)
-                    logger.debug(f"[{run_id}] {field_name} = {value} -> {worksheet}!{address}")
+                    logger.info(f"[{run_id}] {field_name} = {value} -> {worksheet}!{address}")
                 
                 # 3. Salvar cópia temporária
                 logger.info(f"[{run_id}] Salvando cópia temporária...")

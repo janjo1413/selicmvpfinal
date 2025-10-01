@@ -1,30 +1,38 @@
-﻿# 📊 Calculadora Trabalhista - SELIC MVP#  Calculadora Trabalhista MVP
+﻿# 📊 Calculadora Trabalhista MVP
 
+> Sistema web que calcula valores trabalhistas usando Excel local como motor de cálculo
 
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)](https://fastapi.tiangolo.com/)
 
-Sistema de cálculo trabalhista com correção monetária por SELIC, IPCA, TR e outros índices.> Sistema web que calcula valores trabalhistas usando Excel local como motor de cálculo
+**Versão:** 1.0.0  
+**Status:** ✅ Funcional
 
+---
 
+## ⚠️ Limitações Conhecidas (v1.0.0)
 
-**Versão:** 1.0.0 (MVP Fase 1)  [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+Esta versão é um MVP funcional com algumas limitações que serão resolvidas na v1.1.0:
 
-**Status:** ✅ Funcional[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)](https://fastapi.tiangolo.com/)
+- **Honorários (%)**: Não calcula dinamicamente. Usa valores pré-calculados do template Excel.
+- **Deságio (%)**: Não calcula dinamicamente. Usa valores pré-calculados do template Excel.
+- **Performance**: ~2 minutos por cálculo (será otimizado para ~10s na v1.1.0)
 
+> � **v1.1.0 Planejada**: Reimplementação completa com cálculos nativos em Python, eliminando dependência do Excel e habilitando cálculos dinâmicos.
 
+---
 
-------
+## 🚀 Início Rápido
 
+### Pré-requisitos
+- Python 3.8+
+- pip (gerenciador de pacotes Python)
 
+### Instalação
 
-## 🚀 Início Rápido##  Início Rápido
-
-
-
-### Pré-requisitos```powershell
-
-- Python 3.13+pip install -r requirements.txt
-
-- Excel instalado (para valores pré-calculados).\iniciar.bat
+```powershell
+pip install -r requirements.txt
+.\iniciar.bat
 
 ```
 
