@@ -1,0 +1,60 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Python files
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+# JavaScript files
+[*.js]
+indent_style = space
+indent_size = 2
+
+# HTML files
+[*.html]
+indent_style = space
+indent_size = 2
+
+# CSS files
+[*.css]
+indent_style = space
+indent_size = 2
+
+# Markdown files
+[*.md]
+max_line_length = 80
+trim_trailing_whitespace = false
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Batch files (Windows)
+[*.bat]
+end_of_line = crlf
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+
+# Configuration files
+[{.env,.env.*,*.ini,*.cfg}]
+indent_style = space
+indent_size = 2

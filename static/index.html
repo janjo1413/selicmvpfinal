@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Trabalhista</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧮 Calculadora Trabalhista</h1>
+            <p class="subtitle">Cálculo de valores com SELIC dinâmica</p>
+        </header>
+
+        <main>
+            <!-- Formulário de Entrada -->
+            <section class="form-section">
+                <h2>📝 Dados do Processo</h2>
+                <form id="calculadoraForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="municipio">Município *</label>
+                            <input type="text" id="municipio" name="municipio" required 
+                                   placeholder="Ex: TIMON" value="TIMON">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="periodo_inicio">Período Início *</label>
+                            <input type="date" id="periodo_inicio" name="periodo_inicio" required
+                                   value="2000-01-01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="periodo_fim">Período Fim *</label>
+                            <input type="date" id="periodo_fim" name="periodo_fim" required
+                                   value="2006-12-01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ajuizamento">Ajuizamento *</label>
+                            <input type="date" id="ajuizamento" name="ajuizamento" required
+                                   value="2005-05-01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="citacao">Citação *</label>
+                            <input type="date" id="citacao" name="citacao" required
+                                   value="2006-06-01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="honorarios_perc">Honorários (%) *</label>
+                            <input type="number" id="honorarios_perc" name="honorarios_perc" 
+                                   min="0" max="100" step="0.01" value="0"
+                                   placeholder="Ex: 15">
+                            <small>0 a 100%</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="honorarios_fixo">Honorários Fixo (R$) *</label>
+                            <input type="number" id="honorarios_fixo" name="honorarios_fixo" 
+                                   min="0" step="0.01" value="0"
+                                   placeholder="Ex: 5000.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="desagio_principal">Deságio Principal (%) *</label>
+                            <input type="number" id="desagio_principal" name="desagio_principal" 
+                                   min="0" max="100" step="0.01" value="20"
+                                   placeholder="Ex: 20">
+                            <small>0 a 100%</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="desagio_honorarios">Deságio Honorários (%) *</label>
+                            <input type="number" id="desagio_honorarios" name="desagio_honorarios" 
+                                   min="0" max="100" step="0.01" value="20"
+                                   placeholder="Ex: 20">
+                            <small>0 a 100%</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="correcao_ate">Correção até *</label>
+                            <input type="date" id="correcao_ate" name="correcao_ate" required
+                                   value="2025-01-01">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="btnCalcular">
+                            ⚙️ Calcular
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btnLimpar">
+                            🔄 Limpar
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Loading -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processando cálculo... Aguarde (5-30 segundos)</p>
+            </div>
+
+            <!-- Mensagem de Erro -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <!-- Resultados -->
+            <section id="resultados" class="results-section" style="display: none;">
+                <h2>📊 Resultados</h2>
+                
+                <div id="resultadosContent" class="results-grid"></div>
+
+                <div class="results-actions">
+                    <button type="button" class="btn btn-success" id="btnExportar">
+                        📥 Exportar CSV
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnNovoCalculo">
+                        🔄 Novo Cálculo
+                    </button>
+                </div>
+
+                <div class="metadata" id="metadata"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>ℹ️ Versão 1.0.0 | FASE 1 - MVP Básico</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - TENANT_ID=${TENANT_ID}
+      - WORKBOOK_ID=${WORKBOOK_ID}
+      - DRIVE_ID=${DRIVE_ID}
+    env_file:
+      - .env
+    volumes:
+      - ./static:/app/static
+    restart: unless-stopped
