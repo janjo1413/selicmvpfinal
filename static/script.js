@@ -184,12 +184,18 @@ function exibirResultados(resultado) {
     }
     
     // Exibir metadata
+    let excelLink = '';
+    if (resultado.excel_output_path) {
+        excelLink = `<p><strong>📁 Excel Processado:</strong> <code>${resultado.excel_output_path}</code></p>`;
+    }
+    
     metadataDiv.innerHTML = `
         <p><strong>Run ID:</strong> ${resultado.run_id}</p>
         <p><strong>Timestamp:</strong> ${formatarDataHora(resultado.timestamp)}</p>
         <p><strong>Tempo de Execução:</strong> ${resultado.execution_time_ms}ms</p>
         <p><strong>Versão da Planilha:</strong> ${resultado.workbook_version || 'N/A'}</p>
         <p><strong>SELIC:</strong> ${resultado.selic_context.message}</p>
+        ${excelLink}
     `;
     
     // Mostrar seção de resultados

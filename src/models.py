@@ -58,6 +58,7 @@ class CalculadoraOutput(BaseModel):
     outputs: Dict[str, CenarioOutput] = Field(..., description="Resultados dos cenários")
     selic_context: Dict[str, Any] = Field(default_factory=dict, description="Contexto da SELIC")
     execution_time_ms: int = Field(..., description="Tempo de execução em ms")
+    excel_output_path: Optional[str] = Field(None, description="Caminho do Excel processado salvo")
 
 
 class ErrorResponse(BaseModel):

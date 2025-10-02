@@ -5,33 +5,46 @@
 
 ---
 
-## 🔥 Prioridade Alta (v1.1.0 - Próxima versão)
+## ✅ Concluído (v1.2.0 - 02/10/2025)
 
-### 🎯 Objetivo Principal: Remover Dependência do Excel
+### Implementações Realizadas
+- [x] **Cálculo Dinâmico de Deságio**: Implementado em `desagio_calculator.py`
+- [x] **API BACEN**: Integração completa com busca de SELIC dinâmica
+- [x] **Fallback Offline**: Cache local em `data/selic_cache.json`
+- [x] **Verificação Automática**: Script para validar com casos reais
+- [x] **Documentação**: Guias completos de BACEN e Verificação
 
-#### Reimplementação de Cálculos em Python
-- [ ] **Módulo de Correção IPCA**: Implementar fórmula de correção monetária
-- [ ] **Módulo de Correção SELIC**: Implementar fórmula com taxas diárias
-- [ ] **Módulo de Correção TR**: Implementar fórmula de correção
-- [ ] **Cálculo Dinâmico de Honorários**: Implementar % sobre valores calculados
-- [ ] **Cálculo Dinâmico de Deságio**: Implementar % sobre principal
-- [ ] **Validação de Precisão**: Comparar Python vs Excel (margem erro < 0.01%)
-- [ ] **Implementar 9 Cenários**: NT7, NT6, JASA, TR, IPCA-E, etc.
+### 🎯 Decisões Estratégicas
+- ✅ **Excel mantido**: Dependência do Excel será mantida por complexidade
+- ✅ **Foco em precisão**: Priorizar correção sobre performance
+- ✅ **Validação real**: Usar casos práticos ao invés de testes unitários puros
 
-#### Performance
-- [ ] Otimizar tempo de execução: ~2min → ~10s (20x mais rápido)
-- [ ] Remover operações de I/O desnecessárias
-- [ ] Implementar cálculos diretos sem arquivos temporários
+---
 
-#### Integrações Externas
-- [ ] **API BACEN**: Buscar taxas SELIC atualizadas automaticamente
+## 🔥 Prioridade Alta (v1.3.0 - Próxima versão)
+
+### Aplicar SELIC no Cálculo Real
+- [ ] **Usar taxas BACEN no Excel**: Atualizar planilha com taxas da API
+- [ ] **Validar precisão**: Comparar cálculo com/sem API BACEN
+- [ ] **Documentar diferenças**: Identificar impacto de taxas atualizadas
+
+### Integrações Externas
 - [ ] **API IBGE**: Buscar índices IPCA atualizados automaticamente
-- [ ] **Fallback Offline**: Arquivo CSV local para taxas/índices históricos
+- [ ] **Validação cruzada**: SELIC + IPCA + TR
 
-#### Qualidade de Código
-- [ ] **Testes Unitários**: pytest para cada função de cálculo (coverage > 80%)
-- [ ] **Testes de Integração**: Validar cenários completos end-to-end
+### Qualidade de Código  
+- [ ] **Expandir verificação**: Adicionar mais municípios ao script
+- [ ] **Automatizar coleta**: Ler valores esperados direto do Excel
 - [ ] **Documentação**: Docstrings detalhadas com exemplos de uso
+
+---
+
+## 🟡 Prioridade Média (v1.4.0)
+
+### Performance (Quando necessário)
+- [ ] Otimizar tempo de execução: ~2min → ~30s
+- [ ] Reduzir operações de I/O desnecessárias
+- [ ] Implementar cache de cálculos frequentes
 
 ---
 

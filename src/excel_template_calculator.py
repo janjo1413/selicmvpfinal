@@ -63,9 +63,12 @@ class ExcelTemplateCalculator:
             
     def save_workbook(self):
         """Salva workbook temporário (necessário para recálculo)"""
-        # NOTA v1.0.0: Desabilitado - openpyxl perde valores calculados ao salvar
-        # TODO v1.1.0: Reimplementar com cálculos nativos em Python
-        pass
+        try:
+            self.workbook.save(self.temp_path)
+            logger.debug(f"Workbook salvo: {self.temp_path}")
+        except Exception as e:
+            logger.error(f"Erro ao salvar workbook: {e}")
+            raise
             
     def read_range_calculated(self, worksheet_name: str, range_address: str) -> List[List]:
         """

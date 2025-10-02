@@ -1,288 +1,240 @@
-﻿# 📊 Ca**Versão:** 1.1.0 🎉  
-**Status:** ✅ Funcional com Honorários Dinâmicos
+# 📊 Calculadora Trabalhista SELIC MVP
 
----
+> Sistema web completo para cálculos trabalhistas com correção monetária e honorários
 
-## ✨ Novidades v1.1.0
-
-- ✅ **Honorários calculam corretamente!** Implementado em Python
-- ✅ **Suporte a honorários percentuais e fixos**
-- ✅ **Deságio de honorários funcional**
-- ✅ **11 testes unitários** garantindo precisão
-- ✅ **Logs detalhados** para debug
-
-## ⚠️ Limitações Conhecidas (v1.1.0)
-
-- **Performance**: ~2 minutos por cálculo (será otimizado na v1.2.0)
-- **Deságio do Principal**: Ainda não implementado (próxima versão)
-
-> 💡 **v1.2.0 Planejada**: Implementar deságio de principal + otimização de performance (~10s).alhista MVP
-
-> Sistema web que calcula valores trabalhistas usando Excel local como motor de cálculo
-
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)](https://fastapi.tiangolo.com/)
-
-**Versão:** 1.0.0  
-**Status:** ✅ Funcional
-
----
-
-## ⚠️ Limitações Conhecidas (v1.0.0)
-
-Esta versão é um MVP funcional com algumas limitações que serão resolvidas na v1.1.0:
-
-- **Honorários (%)**: Não calcula dinamicamente. Usa valores pré-calculados do template Excel.
-- **Deságio (%)**: Não calcula dinamicamente. Usa valores pré-calculados do template Excel.
-- **Performance**: ~2 minutos por cálculo (será otimizado para ~10s na v1.1.0)
-
-> � **v1.1.0 Planejada**: Reimplementação completa com cálculos nativos em Python, eliminando dependência do Excel e habilitando cálculos dinâmicos.
+**Versão:** 1.2.0 (com APIs integradas)  
+**Status:** ✅ Em produção
 
 ---
 
 ## 🚀 Início Rápido
 
-### Pré-requisitos
-- Python 3.8+
-- pip (gerenciador de pacotes Python)
-
-### Instalação
-
+### Executar localmente:
 ```powershell
-pip install -r requirements.txt
+# Windows
 .\iniciar.bat
 
+# Ou manualmente:
+python -m uvicorn app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Instalação
-
-Acesse: **http://localhost:8000** 
-
-```bash
-
-# 1. Clone o repositório---
-
-git clone https://github.com/janjo1413/selicmvpfinal.git
-
-cd selicmvpfinal##  Estrutura
-
-
-
-# 2. Execute o instalador (Windows)```
-
-.\iniciar.batsrc/           Código Python
-
-```static/        Interface web
-
-data/          Excel (timon_01-2025.xlsx)
-
-O script vai:tests/         Testes
-
-- ✅ Criar ambiente virtual Pythondocs/          Documentação detalhada
-
-- ✅ Instalar dependências```
-
-- ✅ Iniciar servidor em http://localhost:8000
+Acesse: **http://localhost:8000**
 
 ---
 
-### Uso
+## ✨ Funcionalidades Principais
 
-##  Configuração (.env)
+### 📊 Cálculos Trabalhistas
+- ✅ **9 cenários de cálculo** (NT7, NT6, JASA, NT36, etc.)
+- ✅ **Honorários dinâmicos** (% + valor fixo)
+- ✅ **Deságio do principal e honorários**
+- ✅ **Correção monetária** até data especificada
 
-1. Abra http://localhost:8000 no navegador
+### 📡 Integração com APIs Oficiais
+- ✅ **BACEN**: SELIC (série 11) + TR (série 226)
+- ✅ **IBGE**: IPCA (agregação 1737) + IPCA-E (agregação 7060)
+- ✅ **Cache local**: Funciona offline com dados salvos
+- ✅ **Validação automática**: Verifica disponibilidade das 4 taxas
 
-2. Preencha os dados do processo```ini
+### 💾 Backups Automáticos
+Cada cálculo gera automaticamente:
+- 📁 **Excel processado** (`data/output/MUNICIPIO_xxxxx_YYYYMMDD_HHMMSS.xlsx`)
+- 📄 **CSV com resultados** (`data/output/MUNICIPIO_xxxxx_YYYYMMDD_HHMMSS.csv`)
 
-3. Clique em **Calcular**EXCEL_FILE_PATH=data/timon_01-2025.xlsx
+### 📤 Exportação
+- ✅ **Exportar CSV** via botão na interface
+- ✅ **Download direto** do navegador
 
-4. Veja os 9 cenários de correçãoAPI_PORT=8000
+---
 
-5. **Exportar CSV** para baixar resultados```
+## 🏗️ Arquitetura
 
+### Stack Tecnológica
+- **Backend**: FastAPI (Python 3.13)
+- **Frontend**: HTML/CSS/JavaScript vanilla
+- **Excel**: openpyxl + template pré-calculado
+- **APIs**: requests + cache local
 
-
-------
-
-
-
-## 📁 Estrutura##  API Endpoints
-
-
-
-```**POST** `/api/calcular` - Calcula valores  
-
-selicmvpfinal/**GET** `/api/exportar-csv` - Exporta CSV
-
-├── app.py                 # Entry point
-
-├── src/                   # Backend Python---
-
-│   ├── main.py           # FastAPI app
-
-│   ├── calculator_service.py##  Documentação Completa
-
+### Estrutura do Projeto
+```
+selicmvpfinal/
+├── src/                          # Código fonte
+│   ├── main.py                   # API FastAPI
+│   ├── calculator_service.py     # Orquestrador principal
 │   ├── excel_template_calculator.py
-
-│   ├── models.py- [QUICKSTART_LOCAL.md](docs/QUICKSTART_LOCAL.md) - Setup local
-
-│   └── config.py- [SETUP.md](docs/SETUP.md) - Configuração avançada
-
-├── static/               # Frontend- [DEPLOY.md](docs/DEPLOY.md) - Deploy produção
-
-│   ├── index.html- [TODO.md](docs/TODO.md) - Roadmap
-
-│   ├── styles.css
-
-│   └── script.js---
-
-├── data/                 # Planilhas Excel
-
-│   └── timon_01-2025.xlsx##  Problemas Comuns
-
-├── docs/                 # Documentação
-
-│   └── TODO.md          # Pendências**Excel não encontrado:** `ls data\*.xlsx`  
-
-└── iniciar.bat          # Script de inicialização**Porta em uso:** Mude `API_PORT` no `.env`  
-
-```**Erro módulos:** `pip install -r requirements.txt --force-reinstall`
-
-
-
-------
-
-
-
-## 🎯 Funcionalidades##  Importante
-
-
-
-### ✅ Implementado (v1.0.0)Faça backup do Excel antes de usar!
-
-- 9 cenários de correção monetária:
-
-  - NT7 (IPCA/SELIC/?)```powershell
-
-  - NT7 (Período CNJ)Copy-Item data\timon_01-2025.xlsx data\backup.xlsx
-
-  - NT6 (IPCA/SELIC/?)```
-
-  - JASA (IPCA/SELIC/?)
-
-  - NT7 TR---
-
-  - NT36 TR
-
-  - NT7 IPCA-E**v2.1** | 01/10/2025 |  Produção
-
-  - NT36 IPCA-E
-  - NT36 IPCA-E + 1% a.m.
-- Cálculo de honorários (% ou fixo)
-- Deságio configurável
-- Export CSV completo
-- Interface responsiva
-
-### 🔄 Em Desenvolvimento (v1.1.0)
-- Otimização de performance (112s → ~10s)
-- Integração com API BACEN (SELIC dinâmica)
-- Testes automatizados
-
----
-
-## ⚙️ Configuração
-
-Crie `.env` na raiz (ou copie `.env.example`):
-
-```env
-# Excel
-EXCEL_FILE_PATH=data/timon_01-2025.xlsx
-
-# API
-API_HOST=0.0.0.0
-API_PORT=8000
-
-# BACEN (Fase 2)
-BACEN_API_BASE=https://api.bcb.gov.br/dados/serie/bcdata.sgs
-BACEN_SERIE_SELIC=432
+│   ├── honorarios_calculator.py
+│   ├── desagio_calculator.py
+│   ├── bacen_service.py          # Cliente API BACEN
+│   ├── ibge_service.py           # Cliente API IBGE
+│   ├── taxas_validator.py        # Validação de taxas
+│   └── models.py                 # Modelos Pydantic
+├── static/                       # Frontend
+│   ├── index.html
+│   ├── script.js
+│   └── styles.css
+├── tests/                        # Testes automatizados
+├── data/
+│   ├── timon_01-2025.xlsx       # Template Excel
+│   ├── cache/                    # Cache de APIs
+│   └── output/                   # Backups automáticos
+└── docs/                         # Documentação
+    ├── ARCHITECTURE.md
+    ├── GUIA_APIS.md
+    ├── RELEASE_v1.2.0_FINAL.md
+    └── arquivo/                  # Docs históricas
 ```
 
 ---
 
-## 🛠️ Tecnologias
+## 📖 Documentação
 
-- **Backend:** Python 3.13, FastAPI 0.109.0
-- **Excel:** openpyxl 3.1.2 (leitura com data_only=True)
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Server:** Uvicorn
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**: Arquitetura detalhada do sistema
+- **[GUIA_APIS.md](docs/GUIA_APIS.md)**: Como usar as APIs BACEN e IBGE
+- **[RELEASE_v1.2.0_FINAL.md](docs/RELEASE_v1.2.0_FINAL.md)**: Notas da versão atual
+- **[TODO.md](docs/TODO.md)**: Roadmap de desenvolvimento
 
 ---
 
-## 📊 API Endpoints
+## 🧪 Testes
 
-### `POST /api/calcular`
-Calcula todos os cenários.
-
-**Request:**
-```json
-{
-  "municipio": "TIMON",
-  "periodo_inicio": "2000-01-01",
-  "periodo_fim": "2006-12-01",
-  "ajuizamento": "2005-05-01",
-  "citacao": "2006-06-01",
-  "honorarios_perc": 20.0,
-  "honorarios_fixo": 0.0,
-  "desagio_principal": 20.0,
-  "desagio_honorarios": 20.0,
-  "correcao_ate": "2025-01-01"
-}
+### Executar todos os testes:
+```powershell
+pytest
 ```
 
-**Response:** JSON com 9 cenários (principal, honorários, total)
+### Executar teste específico:
+```powershell
+python teste_rapido_v120.py  # Teste completo v1.2.0 (8 módulos)
+python run_integration_tests.py  # Testes de integração
+```
 
-### `POST /api/exportar-csv`
-Exporta resultado em CSV.
+### Cobertura de Testes
+- ✅ Cálculo de deságio
+- ✅ Cálculo de honorários
+- ✅ APIs BACEN (SELIC + TR)
+- ✅ APIs IBGE (IPCA + IPCA-E)
+- ✅ Validação de taxas
+- ✅ Cache local
+- ✅ Integração Excel vs Sistema
 
 ---
 
-## 🐛 Problemas Conhecidos
+## 🔧 Configuração
 
-1. **Performance:** Tempo de execução ~112s (otimização na v1.1.0)
-2. **OneDrive:** Pode interferir com arquivos Excel (usar C:\Temp se necessário)
-3. **SELIC estática:** Taxas não atualizam automaticamente (v1.1.0)
+### Variáveis de Ambiente (.env)
+```bash
+# Excel template
+EXCEL_PATH=data/timon_01-2025.xlsx
+
+# Cache
+CACHE_DIR=data/cache
+
+# Output
+OUTPUT_DIR=data/output
+```
+
+### Dependências (requirements.txt)
+```
+fastapi==0.109.0
+uvicorn==0.27.0
+openpyxl==3.1.2
+requests==2.31.0
+python-dotenv==1.0.0
+pydantic==2.5.3
+```
 
 ---
 
-## 🤝 Contribuindo
+## 📊 Fluxo de Cálculo
+
+1. **Leitura do Template**: Sistema lê valores pré-calculados do Excel
+2. **Aplicação de Deságio**: Desconto sobre o principal bruto
+3. **Cálculo de Honorários**: % sobre principal líquido + valor fixo
+4. **Aplicação de Deságio de Honorários**: Desconto sobre honorários
+5. **Geração de Backups**: Excel + CSV salvos em `data/output/`
+6. **Validação de Taxas**: Verifica APIs BACEN e IBGE
+7. **Resposta**: JSON com 9 cenários calculados
+
+---
+
+## 🎯 Cenários Calculados
+
+| Cenário | Descrição | Índices Utilizados |
+|---------|-----------|-------------------|
+| **NT7 (IPCA/SELIC/?)** | Nota Técnica 7 | IPCA, SELIC |
+| **NT7 (Período CNJ)** | NT7 com período CNJ | IPCA, SELIC |
+| **NT6 (IPCA/SELIC/?)** | Nota Técnica 6 | IPCA, SELIC |
+| **JASA (IPCA/SELIC/?)** | Juros Acumulados | IPCA, SELIC |
+| **NT7 TR** | NT7 com TR | TR |
+| **NT36 TR** | Nota Técnica 36 com TR | TR |
+| **NT7 IPCA-E** | NT7 com IPCA-E | IPCA-E |
+| **NT36 IPCA-E** | NT36 com IPCA-E | IPCA-E |
+| **NT36 IPCA-E + 1%** | NT36 IPCA-E + 1% a.m. | IPCA-E |
+
+---
+
+## 🐛 Troubleshooting
+
+### APIs não funcionam?
+- ✅ Sistema usa **cache local** automaticamente
+- ✅ Verifique `data/cache/` para arquivos JSON
+- ✅ Cache é atualizado quando API responde
+
+### Cálculos muito lentos?
+- ⚠️ Tempo médio: ~2 minutos por cálculo
+- 📌 Otimização planejada para v1.3.0
+
+### Excel salvo mostra valores diferentes?
+- ✅ Abra no **Excel Desktop** (não navegador)
+- ✅ Excel recalcula fórmulas automaticamente
+- ✅ Compare com **CSV backup** para valores exatos
+
+---
+
+## 📝 Changelog
+
+### v1.2.0 (Atual)
+- ✅ Integração completa com APIs BACEN e IBGE
+- ✅ Cache local para 4 taxas essenciais
+- ✅ Backup automático (Excel + CSV)
+- ✅ Validação automática de taxas
+- ✅ Correção de formatos (datas e percentuais)
+
+### v1.1.0
+- ✅ Cálculo correto de honorários
+- ✅ Deságio de honorários implementado
+- ✅ 11 testes unitários
+
+### v1.0.0
+- ✅ MVP funcional
+- ✅ 9 cenários de cálculo
+- ✅ Interface web básica
+
+---
+
+## 👥 Contribuição
 
 1. Fork o projeto
-2. Crie sua feature branch (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: Minha feature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
+2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
 
 ---
 
-## 📝 Licença
+## 📄 Licença
 
-Este projeto é proprietário. Todos os direitos reservados.
-
----
-
-## 📞 Contato
-
-Para bugs ou sugestões:
-- 🐛 Abra uma issue no GitHub
-- 📧 Entre em contato com a equipe
+Este projeto é privado e confidencial.
 
 ---
 
-## 📚 Documentação Adicional
+## 🔗 Links Úteis
 
-- **Pendências:** Ver `docs/TODO.md`
-- **Histórico:** Ver `CHANGELOG.md`
+- **API BACEN**: https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados
+- **API IBGE**: https://servicodados.ibge.gov.br/api/v3/agregados/{agregacao}
+- **Documentação FastAPI**: https://fastapi.tiangolo.com/
+- **openpyxl Docs**: https://openpyxl.readthedocs.io/
 
 ---
 
-**Última atualização:** 01/10/2025
+**Desenvolvido com ❤️ para cálculos trabalhistas precisos**
