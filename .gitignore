@@ -49,9 +49,27 @@ temp_*.xlsx
 ~$*.xlsx
 ~$*.xls
 *.tmp
+teste_*.xlsx
+calc_*.xlsx
+
+# Output files (generated)
+data/output/*.xlsx
+data/output/*.csv
 
 # CSV exports (opcional - remova linha abaixo se quiser versionar exports)
 exports/*.csv
+
+# Test and diagnostic scripts
+analisar_*.py
+buscar_*.py
+comparar_*.py
+ler_*.py
+teste_*.py
+testar_*.py
+verificar_*.py
+validacao_*.py
+CHECKLIST_*.md
+LIMPEZA_*.md
 
 # Backups
 backup*/

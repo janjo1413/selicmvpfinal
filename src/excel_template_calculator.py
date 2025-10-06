@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, List
 from openpyxl import load_workbook
+from excel_recalculator import ExcelRecalculator
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +70,57 @@ class ExcelTemplateCalculator:
         except Exception as e:
             logger.error(f"Erro ao salvar workbook: {e}")
             raise
+    
+    def recalculate_workbook(self) -> bool:
+        """
+        Força recálculo do Excel usando win32com
+        Deve ser chamado após escrever valores e antes de ler resultados
+        
+        Returns:
+            True se recalculou com sucesso, False caso contrário
+        """
+        if not ExcelRecalculator.is_available():
+            logger.warning("⚠️ win32com não disponível - pulando recálculo Excel")
+            return False
+        
+        try:
+            # Fechar workbook openpyxl e aguardar
+            if self.workbook:
+                self.workbook.close()
+                self.workbook = None
+            
+            # Aguardar para garantir que arquivo foi liberado
+            import time
+            time.sleep(1.0)
+            
+            # Recalcular usando Excel COM
+            logger.info("🔄 Recalculando Excel via win32com...")
+            success = ExcelRecalculator.recalculate_workbook(self.temp_path, visible=False)
+            
+            if success:
+                logger.info("✅ Excel recalculado com sucesso")
+            else:
+                logger.error("❌ Falha ao recalcular Excel")
+            
+            # Aguardar antes de reabrir
+            time.sleep(1.0)
+            
+            # Reabrir workbook openpyxl
+            self.workbook = load_workbook(self.temp_path, data_only=False)
+            
+            return success
+            
+        except Exception as e:
+            logger.error(f"Erro ao recalcular workbook: {e}")
+            # Tentar reabrir workbook mesmo em caso de erro
+            if not self.workbook:
+                try:
+                    import time
+                    time.sleep(1.0)
+                    self.workbook = load_workbook(self.temp_path, data_only=False)
+                except:
+                    pass
+            return False
             
     def read_range_calculated(self, worksheet_name: str, range_address: str) -> List[List]:
         """

@@ -147,13 +147,45 @@ class CalculadoraService:
                 # 1. Obter versão da planilha
                 workbook_version = "TIMON 01-2025"
                 
-                # 2. *** IMPORTANTE: LER VALORES DO TEMPLATE PRIMEIRO (antes de modificar) ***
-                # O openpyxl perde valores calculados ao salvar, então precisamos ler ANTES
-                logger.info(f"[{run_id}] Lendo valores calculados do template ORIGINAL")
-                logger.info(f"[{run_id}] Aplicando deságio do principal e calculando honorários em Python...")
+                # 2. ESCREVER inputs no Excel PRIMEIRO (para recalcular com dados corretos)
+                logger.info(f"[{run_id}] Escrevendo inputs no Excel para recálculo")
                 
-                # Preparar input_dict para cálculos
+                # Preparar input_dict
                 input_dict = inputs.model_dump()
+                
+                # Campos que são percentuais (Excel espera frações: 0.20 = 20%)
+                percentage_fields = ['honorarios_perc', 'desagio_principal', 'desagio_honorarios']
+                
+                for field_name, (worksheet, address) in INPUT_MAPPING.items():
+                    value = input_dict[field_name]
+                    
+                    # Formatar datas (retorna datetime object)
+                    if hasattr(value, 'strftime'):
+                        value = self._format_date_for_excel(value)
+                    
+                    # Converter percentuais (20 -> 0.20)
+                    elif field_name in percentage_fields:
+                        value = self._format_percentage_for_excel(value)
+                    
+                    # Escrever na célula
+                    excel_calc.write_cell(worksheet, address, value)
+                    logger.debug(f"[{run_id}] {field_name} = {value} -> {worksheet}!{address}")
+                
+                # 3. Salvar Excel com inputs escritos
+                logger.info(f"[{run_id}] Salvando Excel antes do recálculo...")
+                excel_calc.save_workbook()
+                
+                # 4. *** RECALCULAR Excel usando win32com ***
+                logger.info(f"[{run_id}] Recalculando fórmulas do Excel...")
+                recalc_success = excel_calc.recalculate_workbook()
+                
+                if not recalc_success:
+                    logger.warning(f"[{run_id}] ⚠️ Excel não foi recalculado (win32com indisponível)")
+                    logger.warning(f"[{run_id}] ⚠️ Resultados podem estar incorretos se município != TIMON")
+                
+                # 5. LER valores calculados do Excel
+                logger.info(f"[{run_id}] Lendo valores calculados após recálculo")
+                logger.info(f"[{run_id}] Aplicando deságio do principal e calculando honorários em Python...")
                 
                 # Instanciar calculadoras
                 desagio_calc = DesagioCalculator()
@@ -205,29 +237,8 @@ class CalculadoraService:
                             total=0.0
                         )
                 
-                # 3. AGORA sim, escrever inputs no Excel (para exportar)
-                logger.info(f"[{run_id}] Escrevendo inputs via openpyxl (para exportar Excel)")
-                
-                # Campos que são percentuais (Excel espera frações: 0.20 = 20%)
-                percentage_fields = ['honorarios_perc', 'desagio_principal', 'desagio_honorarios']
-                
-                for field_name, (worksheet, address) in INPUT_MAPPING.items():
-                    value = input_dict[field_name]
-                    
-                    # Formatar datas (retorna datetime object)
-                    if hasattr(value, 'strftime'):
-                        value = self._format_date_for_excel(value)
-                    
-                    # Converter percentuais (20 -> 0.20)
-                    elif field_name in percentage_fields:
-                        value = self._format_percentage_for_excel(value)
-                    
-                    # Escrever na célula
-                    excel_calc.write_cell(worksheet, address, value)
-                    logger.debug(f"[{run_id}] {field_name} = {value} -> {worksheet}!{address}")
-                
-                # 4. Salvar Excel com inputs escritos (para exportar)
-                logger.info(f"[{run_id}] Salvando Excel com inputs...")
+                # 6. Salvar Excel final (já tem inputs e valores recalculados)
+                logger.info(f"[{run_id}] Salvando Excel final para exportação...")
                 excel_calc.save_workbook()
                 
                 # 5. Copiar para data/output/
