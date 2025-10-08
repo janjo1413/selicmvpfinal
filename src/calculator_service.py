@@ -1,5 +1,6 @@
 """
 Serviço principal de cálculo
+ARQUITETURA: Excel é 100% correto - site ESPELHA a planilha
 """
 import logging
 import time
@@ -9,8 +10,6 @@ from typing import Dict, Any
 from pathlib import Path
 from models import CalculadoraInput, CalculadoraOutput, CenarioOutput
 from excel_template_calculator import ExcelTemplateCalculator
-from honorarios_calculator import HonorariosCalculator
-from desagio_calculator import DesagioCalculator
 from bacen_service import BacenService
 from taxas_validator import TaxasValidator
 from config import EXCEL_FULL_PATH
@@ -25,8 +24,8 @@ INPUT_MAPPING = {
     "periodo_fim": ("RESUMO", "F6"),
     "ajuizamento": ("RESUMO", "B7"),
     "citacao": ("RESUMO", "B8"),
-    "honorarios_perc": ("RESUMO", "B11"),
-    "honorarios_fixo": ("RESUMO", "B12"),
+    "honorarios_perc": ("RESUMO", "B11"),  # Novo template: B11 (não mais B9)
+    "honorarios_fixo": ("RESUMO", "B12"),  # Novo template: B12 (não mais B10)
     "desagio_principal": ("RESUMO", "B13"),
     "desagio_honorarios": ("RESUMO", "B14"),
     "correcao_ate": ("RESUMO", "B15"),
@@ -183,51 +182,55 @@ class CalculadoraService:
                     logger.warning(f"[{run_id}] ⚠️ Excel não foi recalculado (win32com indisponível)")
                     logger.warning(f"[{run_id}] ⚠️ Resultados podem estar incorretos se município != TIMON")
                 
-                # 5. LER valores calculados do Excel
-                logger.info(f"[{run_id}] Lendo valores calculados após recálculo")
-                logger.info(f"[{run_id}] Aplicando deságio do principal e calculando honorários em Python...")
-                
-                # Instanciar calculadoras
-                desagio_calc = DesagioCalculator()
-                hon_calc = HonorariosCalculator()
+                # 5. LER TODOS OS VALORES CALCULADOS DIRETAMENTE DO EXCEL
+                logger.info(f"[{run_id}] Lendo valores calculados após recálculo (100% da planilha)")
+                logger.info(f"[{run_id}] SITE VAI ESPELHAR A PLANILHA - SEM CÁLCULOS EM PYTHON!")
                 
                 results = {}
                 for cenario_name, line_number in OUTPUT_LINES.items():
-                    # Ler coluna D (Principal BRUTO) da linha
-                    range_address = f"D{line_number}"
-                    values = excel_calc.read_range_calculated("RESUMO", range_address)
+                    # Ler linha de DADOS (linha do cenário - ex: 23)
+                    # Lê colunas D, E, F da linha do cenário
+                    range_data = f"D{line_number}:F{line_number}"
+                    values_data = excel_calc.read_range_calculated("RESUMO", range_data)
                     
-                    if values and len(values) > 0:
-                        # Principal BRUTO vem do Excel
-                        principal_bruto = float(values[0][0]) if values[0][0] is not None else 0.0
+                    # Ler linha de TOTAL (linha + 1 - ex: 24)
+                    # Esta linha TEM o principal com deságio aplicado
+                    range_total = f"D{line_number + 1}:F{line_number + 1}"
+                    values_total = excel_calc.read_range_calculated("RESUMO", range_total)
+                    
+                    if values_data and values_total and len(values_data) > 0 and len(values_total) > 0:
+                        # LINHA DE DADOS (ex: 23)
+                        # D = Valor Atualizado (principal bruto SEM deságio)
+                        # E = Honorários calculados
+                        # F = Honorários fixo
+                        valor_atualizado_bruto = float(values_data[0][0]) if values_data[0][0] is not None else 0.0
+                        honorarios_linha = float(values_data[0][1]) if values_data[0][1] is not None else 0.0
+                        honorarios_fixo_linha = float(values_data[0][2]) if values_data[0][2] is not None else 0.0
                         
-                        # 1. Aplicar deságio no principal
-                        desagio_resultado = desagio_calc.aplicar_desagio(
-                            principal_bruto=principal_bruto,
-                            desagio_percentual=input_dict['desagio_principal']
-                        )
-                        principal_liquido = desagio_resultado['principal_liquido']
+                        # LINHA DE TOTAL (ex: 24) - TEM DESÁGIO APLICADO
+                        # D = Principal LÍQUIDO (com deságio aplicado)
+                        # E = Honorários % líquido
+                        # F = Honorários fixo líquido
+                        principal_liquido = float(values_total[0][0]) if values_total[0][0] is not None else 0.0
+                        honorarios_perc = float(values_total[0][1]) if values_total[0][1] is not None else 0.0
+                        honorarios_fixo = float(values_total[0][2]) if values_total[0][2] is not None else 0.0
                         
-                        # 2. Calcular honorários sobre principal LÍQUIDO
-                        hon_resultado = hon_calc.calcular(
-                            principal=principal_liquido,
-                            honorarios_perc=input_dict['honorarios_perc'],
-                            honorarios_fixo=input_dict['honorarios_fixo'],
-                            desagio_honorarios=input_dict['desagio_honorarios']
-                        )
+                        # TOTAL = Principal Líquido + Honorários % + Honorários Fixo
+                        honorarios_total = honorarios_perc + honorarios_fixo
+                        total = principal_liquido + honorarios_total
                         
                         results[cenario_name] = CenarioOutput(
                             principal=principal_liquido,
-                            honorarios=hon_resultado['honorarios'],
-                            total=hon_resultado['total']
+                            honorarios=honorarios_total,
+                            total=total
                         )
                         
                         logger.debug(
-                            f"[{run_id}] {cenario_name}: "
-                            f"P_bruto={principal_bruto:,.2f}, "
+                            f"[{run_id}] {cenario_name} (linha {line_number}): "
+                            f"P_bruto={valor_atualizado_bruto:,.2f}, "
                             f"P_líquido={principal_liquido:,.2f}, "
-                            f"H={hon_resultado['honorarios']:,.2f}, "
-                            f"T={hon_resultado['total']:,.2f}"
+                            f"H={honorarios_total:,.2f}, "
+                            f"T={total:,.2f}"
                         )
                     else:
                         logger.warning(f"[{run_id}] Dados inválidos para {cenario_name} na linha {line_number}")
